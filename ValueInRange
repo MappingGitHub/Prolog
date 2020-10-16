@@ -1,0 +1,28 @@
+%Write a procedure named myBetween (so named to avoid conflict with the
+%predefined between procedure) which nondeterministically produces all the values
+%within a range, inclusive. myBetween should take three parameters, namely:
+%1. The low end of the range
+%2. The high end of the range
+%3. A value within that range
+%Example queries and output involving myBetween is shown below:
+
+
+%?- myBetween(3, 5, X).
+%expected values should be : [3,4,5]
+%X = 3 ;
+%X = 4 ;
+%X = 5.
+%
+
+%myBetween(3,3,X)
+%X=4
+%myBetween: Low,High,ValueInRange
+
+myBetween(Low,High,ValueInRange):-
+    Low=<High,
+    %not done: what is the value?
+    ValueInRange = Low.
+myBetween(Low,High,ValueInRange):-
+    Low<High,
+    NewLow is Low+1,
+    myBetween(NewLow ,High,ValueInRange).
