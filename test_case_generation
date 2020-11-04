@@ -1,0 +1,71 @@
+% System under test: calculator
+%
+% %expression ::= integer | expression + expression | - expression
+%
+% expression ::= integer(INT) | plus(expression, expression) | negate(expression)
+%
+%                 integers(5) | plus(integer(2),integer(3)) |   negate(integer(4))
+%
+
+expression(integer(0)).
+expression(integer(1)).
+expression(plus(E1,E2)) :-
+    expression(E1),
+    expression(E2).
+expression(negate(E)) :-
+    expression(E).
+%0+(0+0)
+%0+(0+(0+0))
+
+
+%?- expression(integer(0)).
+%true.
+
+%?- expression(plus(integer(0),integer(1))).
+%true.
+
+%?- expression(negate(integer(1))).
+%true.
+
+
+%?-  expression(X).
+%X = integer(0) ;
+%X = integer(1) ;
+%X = plus(integer(0), integer(0)) ;
+%X = plus(integer(0), integer(1)) ;
+%X = plus(integer(0), plus(integer(0), integer(0))) ;
+%X = plus(integer(0), plus(integer(0), integer(1))) ;
+%X = plus(integer(0), plus(integer(0), plus(integer(0), integer(0)))) ;
+%X = plus(integer(0), plus(integer(0), plus(integer(0), integer(1)))) ;
+
+
+%For something recursive, Bound > 0.
+%When we make recursive calls,decrement Bound
+%expressionBounded: Bound, Expression
+
+expressionBounded(_,integer(0)).
+expressionBounded(_,integer(1)).
+
+expressionBounded(Bound,plus(E1,E2)):-
+    Bound>0,
+    NewBound is Bound -1,
+    expressionBounded(NewBound,E1),
+    expressionBounded(NewBound,E2).
+
+expressionBounded(Bound,negate(E)) :-
+    Bound>0,
+    NewBound is  Bound -1,
+    expressionBounded(NewBound,E).
+
+%?- expressionBounded(1,Expression).
+%Expression = integer(0) ;
+%Expression = integer(1) ;
+%Expression = plus(integer(0), integer(0)) ;
+%Expression = plus(integer(0), integer(1)) ;
+%Expression = plus(integer(1), integer(0)) ;
+%Expression = plus(integer(1), integer(1)) ;
+%Expression = negate(integer(0)) ;
+%Expression = negate(integer(1)) ;
+%false.
+%
+
