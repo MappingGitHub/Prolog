@@ -1,0 +1,35 @@
+expression(negate(E)):-
+    expression(E).
+
+decBound(Bound,NewBound):-
+    Bound>0,
+    NewBound is Bound -1.
+
+%For something recursive, Bound > 0.
+%When we make recursive calls,decrement Bound
+%expressionBounded: Bound, Expression
+
+expressionBounded(_,integer(0)).
+expressionBounded(_,integer(1)).
+
+expressionBounded(Bound,plus(E1,E2)):-
+    decBound(Bound,NewBound),
+    expressionBounded(NewBound,E1),
+    expressionBounded(NewBound,E2).
+
+expressionBounded(Bound,negate(E)) :-
+    decBound(Bound,NewBound),
+    expressionBounded(NewBound,E).
+
+%?- expressionBounded(1,Expression).
+%Expression = integer(0) ;
+%Expression = integer(1) ;
+%Expression = plus(integer(0), integer(0)) ;
+%Expression = plus(integer(0), integer(1)) ;
+%Expression = plus(integer(1), integer(0)) ;
+%Expression = plus(integer(1), integer(1)) ;
+%Expression = negate(integer(0)) ;
+%Expression = negate(integer(1)) ;
+%false.
+%
+%
